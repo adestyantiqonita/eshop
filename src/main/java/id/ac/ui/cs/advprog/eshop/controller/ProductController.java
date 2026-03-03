@@ -53,4 +53,9 @@ public class ProductController {
         service.update(product);
         return "redirect:list";
     }
+
+    @GetMapping("")
+    public String index() {
+        return "index";
+    }
 }
