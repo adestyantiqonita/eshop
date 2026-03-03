@@ -22,3 +22,17 @@ Dalam mengerjakan fitur List, Create, Edit, dan Delete Product, saya telah mener
 Jika ditemukan kekurangan, saya berencana untuk:
 * Menambahkan validasi input yang lebih ketat agar pengguna tidak bisa memasukkan jumlah produk negatif atau nama kosong.
 * Memisahkan logika bisnis yang lebih kompleks ke dalam Service Layer secara lebih mendalam untuk menjaga prinsip *Separation of Concerns*.
+
+---
+
+## Reflection 2
+
+### 1. Unit Testing & Code Coverage
+* **Feelings after writing unit tests:** Menulis unit test memberikan rasa aman dan kepercayaan diri tinggi terhadap fungsionalitas kode. Dengan adanya test, kita tidak perlu melakukan pengecekan manual yang melelahkan setiap kali ada perubahan kode.
+* **Number of unit tests in a class:** Jumlah unit test harus cukup untuk memverifikasi setiap jalur logika (logic path), termasuk skenario positif (data valid) dan skenario negatif (data tidak ada atau error).
+* **100% Code Coverage vs Bugs:** Memiliki 100% code coverage tidak menjamin kode bebas dari bug. Coverage hanya mengukur baris mana yang dieksekusi oleh test, namun tidak menjamin kebenaran logika test dalam menangani semua kemungkinan kasus di dunia nyata.
+
+### 2. Functional Testing & Clean Code
+* **Cleanliness of new functional test suites:** Jika kita membuat suite baru dengan prosedur setup yang identik dengan sebelumnya, hal ini akan menimbulkan masalah duplikasi kode (Code Duplication).
+* **Code Quality Issues:** Duplikasi melanggar prinsip DRY (Don't Repeat Yourself), yang menurunkan kualitas kode karena jika ada perubahan pada konfigurasi setup (seperti URL atau port), kita harus memperbaruinya di banyak tempat secara manual.
+* **Suggested Improvements:** Solusi untuk meningkatkan kebersihan kode adalah dengan menggunakan prinsip Inheritance. Kita dapat membuat satu **Base Class** yang menangani prosedur setup umum dan variabel instans, lalu kelas tes lainnya cukup melakukan `extends` ke kelas tersebut.
