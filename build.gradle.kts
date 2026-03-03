@@ -24,10 +24,10 @@ repositories {
 	mavenCentral()
 }
 
+val junitJupiterVersion = "5.10.0"
 val seleniumJavaVersion = "4.14.1"
 val seleniumJupiterVersion = "5.0.1"
 val webdrivermanagerVersion = "5.6.3"
-val junitJupiterVersion = "5.9.1"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -43,6 +43,20 @@ dependencies {
 	testImplementation("io.github.bonigarcia:webdrivermanager:${webdrivermanagerVersion}")
 	testImplementation("org.junit.jupiter:junit-jupiter-api:${junitJupiterVersion}")
 	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitJupiterVersion}")
+	testImplementation(platform("org.junit:junit-bom:5.10.0"))
+	testImplementation("org.junit.jupiter:junit-jupiter")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+configurations.all {
+	resolutionStrategy.eachDependency {
+		if (requested.group == "org.junit.jupiter") {
+			useVersion("5.10.0")
+		}
+		if (requested.group == "org.junit.platform") {
+			useVersion("1.10.0")
+		}
+	}
 }
 
 tasks.register<Test>("unitTest") {
