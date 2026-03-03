@@ -65,4 +65,59 @@ class ProductRepositoryTest {
         assertEquals(product2.getProductId(), savedProduct.getProductId());
         assertFalse(productIterator.hasNext());
     }
+
+    @Test
+    void testUpdateProductPositive() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-4600-8860-71af6af63b06");
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        Product updatedProduct = new Product();
+        updatedProduct.setProductId("eb558e9f-1c39-4600-8860-71af6af63b06");
+        updatedProduct.setProductName("Sampo Cap Usep");
+        updatedProduct.setProductQuantity(50);
+        productRepository.update(updatedProduct);
+
+        Product savedProduct = productRepository.findById(product.getProductId());
+        assertEquals("Sampo Cap Usep", savedProduct.getProductName());
+        assertEquals(50, savedProduct.getProductQuantity());
+    }
+
+    @Test
+    void testUpdateProductNegative() {
+        Product product = new Product();
+        product.setProductId("id-yang-ada");
+        productRepository.create(product);
+
+        Product nonExistentProduct = new Product();
+        nonExistentProduct.setProductId("id-tidak-ada");
+        nonExistentProduct.setProductName("Barang Ghaib");
+
+        Product result = productRepository.update(nonExistentProduct);
+        assertNull(result);
+    }
+
+    @Test
+    void testDeleteProductPositive() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-4600-8860-71af6af63b06");
+        productRepository.create(product);
+
+        productRepository.delete("eb558e9f-1c39-4600-8860-71af6af63b06");
+
+        Product result = productRepository.findById("eb558e9f-1c39-4600-8860-71af6af63b06");
+        assertNull(result);
+    }
+
+    @Test
+    void testDeleteProductNegative() {
+        Product product = new Product();
+        product.setProductId("id-asli");
+        productRepository.create(product);
+        productRepository.delete("id-palsu");
+        Product result = productRepository.findById("id-asli");
+        assertNotNull(result);
+    }
 }
