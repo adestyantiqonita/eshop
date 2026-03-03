@@ -34,8 +34,6 @@ class HomePageFunctionalTest {
     void pageTitle_isCorrect(ChromeDriver driver) throws Exception {
         driver.get(testUrl);
         String pageTitle = driver.getTitle();
-
-        // Ganti sesuai judul yang ada di index.html kamu
         assertEquals("ADV Shop", pageTitle);
     }
 
