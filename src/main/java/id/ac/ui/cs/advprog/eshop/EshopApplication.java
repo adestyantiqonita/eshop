@@ -7,10 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class EshopApplication {
 
 	/**
-	 * Protected constructor to prevent instantiation of this utility class.
-	 * PMD requires a comment inside empty constructors.
+	 * Private constructor to prevent instantiation of this utility class.
 	 */
-	protected EshopApplication() {
+	private EshopApplication() {
 		// This constructor is intentionally empty.
 	}
 
