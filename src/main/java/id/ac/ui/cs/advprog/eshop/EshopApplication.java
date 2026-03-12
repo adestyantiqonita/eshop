@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class EshopApplication {
+public final class EshopApplication {
 
 	/**
 	 * Private constructor to prevent instantiation of this utility class.
