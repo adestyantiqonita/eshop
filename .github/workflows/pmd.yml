@@ -20,6 +20,6 @@ jobs:
         uses: pmd/pmd-github-action@v2
         with:
           version: '7.0.0-rc4'
-          source: 'src/main/java'
+          sourcePath: 'src/main/java'
           rulesets: 'rulesets/java/quickstart.xml'
           analyzeModifiedFilesOnly: false
