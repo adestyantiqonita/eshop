@@ -31,14 +31,14 @@ class HomePageFunctionalTest {
     }
 
     @Test
-    void pageTitle_isCorrect(ChromeDriver driver) throws Exception {
+    void pageTitleIsCorrect(ChromeDriver driver) throws Exception {
         driver.get(testUrl);
         String pageTitle = driver.getTitle();
         assertEquals("ADV Shop", pageTitle);
     }
 
     @Test
-    void welcomeMessage_isCorrect(ChromeDriver driver) throws Exception {
+    void welcomeMessageIsCorrect(ChromeDriver driver) throws Exception {
         driver.get(testUrl);
         String welcomeMessage = driver.findElement(By.tagName("h3")).getText();
 
