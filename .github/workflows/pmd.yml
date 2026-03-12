@@ -1,0 +1,25 @@
+name: PMD Static Analysis
+
+on:
+  push:
+    branches: [ module-2-exercise ]
+  pull_request:
+    branches: [ module-2-exercise ]
+
+jobs:
+  pmd-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: Run PMD
+        uses: pmd/pmd-github-action@v2
+        with:
+          version: '7.0.0-rc4'
+          source: 'src/main/java'
+          rulesets: 'rulesets/java/quickstart.xml'
+          analyzeModifiedFilesOnly: false
