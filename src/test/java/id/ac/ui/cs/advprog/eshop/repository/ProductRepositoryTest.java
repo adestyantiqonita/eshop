@@ -120,4 +120,28 @@ class ProductRepositoryTest {
         Product result = productRepository.findById("id-asli");
         assertNotNull(result);
     }
+
+    @Test
+    void testCreateProductWithNoId() {
+        Product product = new Product();
+        product.setProductId(null);
+        product.setProductName("Produk Tanpa ID");
+        product.setProductQuantity(10);
+
+        productRepository.create(product);
+
+        assertNotNull(product.getProductId());
+        assertFalse(product.getProductId().isEmpty());
+    }
+
+    @Test
+    void testFindByIdNegative() {
+        Product product = new Product();
+        product.setProductId("id-nyata");
+        productRepository.create(product);
+
+        Product result = productRepository.findById("id-ghaib");
+        assertNull(result);
+    }
 }
+
