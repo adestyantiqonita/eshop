@@ -36,3 +36,19 @@ Jika ditemukan kekurangan, saya berencana untuk:
 * **Cleanliness of new functional test suites:** Jika kita membuat suite baru dengan prosedur setup yang identik dengan sebelumnya, hal ini akan menimbulkan masalah duplikasi kode (Code Duplication).
 * **Code Quality Issues:** Duplikasi melanggar prinsip DRY (Don't Repeat Yourself), yang menurunkan kualitas kode karena jika ada perubahan pada konfigurasi setup (seperti URL atau port), kita harus memperbaruinya di banyak tempat secara manual.
 * **Suggested Improvements:** Solusi untuk meningkatkan kebersihan kode adalah dengan menggunakan prinsip Inheritance. Kita dapat membuat satu **Base Class** yang menangani prosedur setup umum dan variabel instans, lalu kelas tes lainnya cukup melakukan `extends` ke kelas tersebut.
+
+---
+
+## Reflection 3 
+
+### 1. Perbaikan Kualitas Kode (Code Quality)
+Dalam pengerjaan latihan ini, ada beberapa masalah kualitas kode yang ditemukan lewat pemindaian **PMD** dan langsung diperbaiki:
+* **Unused Imports:** Menghapus bagian *import* yang tidak terpakai supaya kode tetap bersih dan proses kompilasi lebih efisien.
+* **Unused Private Fields:** Menghapus variabel privat yang sudah dideklarasikan tapi tidak pernah digunakan dalam kelas, tujuannya agar kode lebih mudah dipelihara (*maintainability*).
+* **Naming Conventions:** Merapikan penamaan variabel dan metode yang belum sesuai dengan standar konvensi *camelCase* Java.
+
+**Strategi perbaikannya:** Proses ini dilakukan secara **iteratif**. Jadi, pengerjaannya dimulai dengan menjalankan perintah `./gradlew pmdMain` secara lokal di terminal IntelliJ. Dari laporan yang muncul, setiap poin dianalisis satu per satu dan langsung diperbaiki. Dengan cara ini, kualitas kode sudah dipastikan aman sebelum masuk ke tahap *push* ke GitHub, jadi nggak perlu nunggu alur kerja CI gagal dulu baru bertindak.
+
+### 2. Evaluasi Alur Kerja CI/CD
+Kalau dilihat dari alur yang sudah berjalan, implementasi saat ini bisa dibilang sudah memenuhi definisi **Continuous Integration (CI)** dan **Continuous Deployment (CD)**.
+Proses CI bisa dilihat dari adanya *workflow* di GitHub Actions yang secara otomatis menjalankan *unit tests* dan analisis kode statis (PMD) setiap kali ada kode baru yang di-*push* atau lewat *pull request*. Hal ini penting untuk menjamin kalau perubahan yang baru masuk tidak merusak fungsi yang sudah ada. Untuk CD sendiri, hal ini terlihat dari integrasi langsung dengan Heroku yang otomatis memicu *deployment* baru begitu kode masuk ke *branch* `main`. Jadi, seluruh prosesnya jadi lebih otomatis, minim intervensi manual, dan versi terbaru aplikasi yang stabil bisa langsung diakses oleh pengguna.
