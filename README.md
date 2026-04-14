@@ -52,3 +52,32 @@ Dalam pengerjaan latihan ini, ada beberapa masalah kualitas kode yang ditemukan 
 ### 2. Evaluasi Alur Kerja CI/CD
 Kalau dilihat dari alur yang sudah berjalan, implementasi saat ini bisa dibilang sudah memenuhi definisi **Continuous Integration (CI)** dan **Continuous Deployment (CD)**.
 Proses CI bisa dilihat dari adanya *workflow* di GitHub Actions yang secara otomatis menjalankan *unit tests* dan analisis kode statis (PMD) setiap kali ada kode baru yang di-*push* atau lewat *pull request*. Hal ini penting untuk menjamin kalau perubahan yang baru masuk tidak merusak fungsi yang sudah ada. Untuk CD sendiri, hal ini terlihat dari integrasi langsung dengan Heroku yang otomatis memicu *deployment* baru begitu kode masuk ke *branch* `main`. Jadi, seluruh prosesnya jadi lebih otomatis, minim intervensi manual, dan versi terbaru aplikasi yang stabil bisa langsung diakses oleh pengguna.
+
+
+Berikut versi yang sudah disesuaikan sintaks dan gayanya:
+
+---
+
+## Reflection 4
+
+### 1. Principles Applied
+
+Dalam pengerjaan ini, beberapa prinsip SOLID yang diterapkan adalah:
+
+* **SRP (Single Responsibility Principle):** Memisahkan `CarController` dari `ProductController` agar masing-masing hanya memiliki satu tanggung jawab.
+* **LSP (Liskov Substitution Principle):** Menghapus inheritance antara `CarController` dan `ProductController` karena Car tidak dapat menggantikan Product secara fungsional.
+* **DIP (Dependency Inversion Principle):** Mengubah dependensi di `CarController` dari `CarServiceImpl` menjadi `CarService` interface agar bergantung pada abstraksi.
+
+### 2. Advantages of Applying SOLID
+
+Beberapa keuntungan yang didapat dari penerapan SOLID:
+
+* **Maintainability:** Perubahan pada fitur Product tidak akan mempengaruhi Car karena sudah dipisahkan (SRP).
+* **Flexibility:** Implementasi `CarService` dapat diganti tanpa perlu mengubah kode di `CarController` (DIP).
+
+### 3. Disadvantages of Not Applying SOLID
+
+Jika prinsip SOLID tidak diterapkan, akan muncul beberapa masalah:
+
+* **Tight Coupling:** Tanpa DIP, perubahan pada service akan memaksa perubahan di controller.
+* **Fragility:** Tanpa SRP, class yang menangani banyak tanggung jawab akan lebih rentan terhadap bug saat ada perubahan kecil.
