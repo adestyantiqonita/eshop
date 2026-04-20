@@ -1,5 +1,6 @@
 package id.ac.ui.cs.advprog.eshop.model;
 
+import id.ac.ui.cs.advprog.eshop.enums.OrderStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,13 +44,13 @@ class OrderTest {
         assertEquals("13652556-012a-4c07-b546-bc13f31eb35d", order.getId());
         assertEquals(1708560000L, order.getOrderTime());
         assertEquals("Bambang Sugeni", order.getAuthor());
-        assertEquals("WAITING_PAYMENT", order.getStatus());
+        assertEquals(OrderStatus.WAITING_PAYMENT.getValue(), order.getStatus());
     }
 
     @Test
     void testCreateOrderSuccessStatus() {
-        Order order = new Order("13652556-012a-4c07-b546-bc13f31eb35d", this.products, 1708560000L, "Bambang Sugeni", "SUCCESS");
-        assertEquals("SUCCESS", order.getStatus());
+        Order order = new Order("13652556-012a-4c07-b546-bc13f31eb35d", this.products, 1708560000L, "Bambang Sugeni", OrderStatus.SUCCESS.getValue()); // Ganti ke Enum
+        assertEquals(OrderStatus.SUCCESS.getValue(), order.getStatus());
     }
 
     @Test
@@ -62,8 +63,8 @@ class OrderTest {
     @Test
     void testSetStatusToCancelled() {
         Order order = new Order("13652556-012a-4c07-b546-bc13f31eb35d", this.products, 1708560000L, "Bambang Sugeni");
-        order.setStatus("CANCELLED");
-        assertEquals("CANCELLED", order.getStatus());
+        order.setStatus(OrderStatus.CANCELLED.getValue());
+        assertEquals(OrderStatus.CANCELLED.getValue(), order.getStatus());
     }
 
     @Test
