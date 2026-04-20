@@ -5,6 +5,7 @@ import id.ac.ui.cs.advprog.eshop.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -13,21 +14,32 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order createOrder(Order order) {
+        if (orderRepository.findById(order.getId()) == null) {
+            orderRepository.save(order);
+            return order;
+        }
         return null;
     }
 
     @Override
     public List<Order> findAllByAuthor(String author) {
-        return null;
+        return orderRepository.findAllByAuthor(author);
     }
 
     @Override
     public Order findById(String id) {
-        return null;
+        return orderRepository.findById(id);
     }
 
     @Override
     public Order updateStatus(String orderId, String status) {
-        return null;
+        Order order = orderRepository.findById(orderId);
+        if (order != null) {
+            order.setStatus(status);
+            orderRepository.save(order);
+            return order;
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 }
