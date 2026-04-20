@@ -81,3 +81,30 @@ Jika prinsip SOLID tidak diterapkan, akan muncul beberapa masalah:
 
 * **Tight Coupling:** Tanpa DIP, perubahan pada service akan memaksa perubahan di controller.
 * **Fragility:** Tanpa SRP, class yang menangani banyak tanggung jawab akan lebih rentan terhadap bug saat ada perubahan kecil.
+
+## Reflection 5
+
+### 1. TDD Workflow Evaluation
+Berdasarkan evaluasi terhadap prinsip yang dijelaskan oleh Percival (2017), alur kerja TDD (Red-Green-Refactor) yang diterapkan terasa cukup membantu dalam menjaga arah pengembangan tetap fokus. Dengan menulis test di awal, kebutuhan fungsional jadi lebih terdefinisi dengan jelas sebelum masuk ke tahap implementasi.
+
+Beberapa manfaat yang dirasakan:
+
+* **Safety Net:** Test berperan sebagai pengaman karena bisa langsung mendeteksi error, baik berupa *exception* maupun kesalahan logika.
+* **Focus:** Proses pengembangan jadi lebih terarah karena hanya menulis kode yang diperlukan untuk membuat test menjadi *pass*, sehingga mengurangi risiko *over-engineering*.
+
+**Rencana perbaikan:**  
+Ke depannya, skenario test akan dipetakan dengan lebih teliti agar tidak terjadi duplikasi atau *redundant test*. Hal ini penting supaya *test suite* tetap efisien dan mudah dipelihara.
+
+---
+
+### 2. Implementation of F.I.R.S.T. Principles
+Dalam pengerjaan unit test pada tutorial ini, prinsip F.I.R.S.T. sudah cukup terakomodasi dan bisa dilihat dari beberapa aspek berikut:
+
+* **Fast:** Test dapat dijalankan dengan cepat karena menggunakan **Mockito** untuk *mocking* dependensi, sehingga tidak perlu terhubung ke database atau service eksternal.
+* **Independent:** Setiap test berdiri sendiri. Penggunaan `@BeforeEach` memastikan kondisi awal selalu bersih dan tidak bergantung pada hasil test lain.
+* **Repeatable:** Test dapat dijalankan berulang kali di berbagai environment dengan hasil yang konsisten karena tidak dipengaruhi faktor eksternal.
+* **Self-Validating:** Validasi dilakukan secara otomatis melalui *assertion* seperti `assertEquals` dan `assertThrows`, jadi tidak perlu pengecekan manual.
+* **Timely:** Test dibuat di awal pada fase *Red*, sehingga sejak awal kode sudah dirancang agar *testable*.
+
+**Rencana perbaikan:**  
+Aspek **Self-Validating** masih bisa ditingkatkan, terutama dengan menambahkan pesan yang lebih deskriptif pada *assertion*. Jadi, kalau terjadi kegagalan, penyebabnya bisa langsung terlihat tanpa perlu menelusuri keseluruhan kode test.
