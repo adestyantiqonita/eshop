@@ -43,12 +43,17 @@ class PaymentControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(paymentController).build();
 
-        // Setup Order untuk testing
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("Sampo Cap Safira");
+        product.setProductQuantity(2);
+
         List<Product> products = new ArrayList<>();
+        products.add(product);
+
         sampleOrder = new Order("13652556-012a-4c07-b546-54eb1396d79b",
                 products, 1708560000L, "Safira Sudrajat");
 
-        // Setup Payment untuk testing
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
         samplePayment = new Payment("p-123", sampleOrder, "VOUCHER", paymentData);
