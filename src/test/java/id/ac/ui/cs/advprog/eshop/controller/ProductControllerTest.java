@@ -36,22 +36,22 @@ class ProductControllerTest {
 
     @Test
     void testIndex() throws Exception {
-        mockMvc.perform(get("/product"))
+        mockMvc.perform(get("/productssss"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"));
     }
 
     @Test
     void testCreateProductPage() throws Exception {
-        mockMvc.perform(get("/product/create"))
+        mockMvc.perform(get("/productssss/create"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("createProduct"))
-                .andExpect(model().attributeExists("product"));
+                .andExpect(model().attributeExists("productssss"));
     }
 
     @Test
     void testCreateProductPost() throws Exception {
-        mockMvc.perform(post("/product/create")
+        mockMvc.perform(post("/productssss/create")
                         .param("productName", "Sampo Cap Bambang")
                         .param("productQuantity", "10"))
                 .andExpect(status().is3xxRedirection())
@@ -63,7 +63,7 @@ class ProductControllerTest {
         List<Product> products = new ArrayList<>();
         when(productService.findAll()).thenReturn(products);
 
-        mockMvc.perform(get("/product/list"))
+        mockMvc.perform(get("/productssss/list"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("productList"))
                 .andExpect(model().attribute("products", products));
@@ -75,15 +75,15 @@ class ProductControllerTest {
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
         when(productService.findById("eb558e9f-1c39-460e-8860-71af6af63bd6")).thenReturn(product);
 
-        mockMvc.perform(get("/product/edit/eb558e9f-1c39-460e-8860-71af6af63bd6"))
+        mockMvc.perform(get("/productssss/edit/eb558e9f-1c39-460e-8860-71af6af63bd6"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("editProduct"))
-                .andExpect(model().attribute("product", product));
+                .andExpect(model().attribute("productssss", product));
     }
 
     @Test
     void testEditProductPost() throws Exception {
-        mockMvc.perform(post("/product/edit")
+        mockMvc.perform(post("/productssss/edit")
                         .param("productId", "eb558e9f-1c39-460e-8860-71af6af63bd6")
                         .param("productName", "Sampo Cap Bambang Baru")
                         .param("productQuantity", "50"))
@@ -93,9 +93,9 @@ class ProductControllerTest {
 
     @Test
     void testDeleteProduct() throws Exception {
-        mockMvc.perform(get("/product/delete/eb558e9f-1c39-460e-8860-71af6af63bd6"))
+        mockMvc.perform(get("/productssss/delete/eb558e9f-1c39-460e-8860-71af6af63bd6"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/product/list"));
+                .andExpect(redirectedUrl("/productssss/list"));
 
         verify(productService, times(1)).delete("eb558e9f-1c39-460e-8860-71af6af63bd6");
     }

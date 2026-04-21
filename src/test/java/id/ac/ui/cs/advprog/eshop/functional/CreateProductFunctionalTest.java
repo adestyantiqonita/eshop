@@ -29,7 +29,7 @@ class CreateProductFunctionalTest {
 
     @BeforeEach
     void setupTest() {
-        testUrl = String.format("%s:%d/product/create", baseUrl, serverPort);
+        testUrl = String.format("%s:%d/productssss/create", baseUrl, serverPort);
     }
 
     @Test
@@ -47,7 +47,7 @@ class CreateProductFunctionalTest {
         driver.findElement(By.cssSelector("button[type='submit']")).click();
         Thread.sleep(1000);
 
-        String expectedUrl = String.format("%s:%d/product/list", baseUrl, serverPort);
+        String expectedUrl = String.format("%s:%d/productssss/list", baseUrl, serverPort);
         assertEquals(expectedUrl, driver.getCurrentUrl());
 
         String pageSource = driver.getPageSource();

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/product")
+@RequestMapping("/productssss")
 public class ProductController {
     @Autowired
     private ProductService service;
@@ -19,7 +19,7 @@ public class ProductController {
     @GetMapping("/create")
     public String createProductPage(Model model) {
         Product product = new Product();
-        model.addAttribute("product", product);
+        model.addAttribute("productssss", product);
         return "createProduct";
     }
 
@@ -39,13 +39,13 @@ public class ProductController {
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable("id") String id) {
         service.delete(id);
-        return "redirect:/product/list";
+        return "redirect:/productssss/list";
     }
 
     @GetMapping("/edit/{id}")
     public String editProductPage(@PathVariable String id, Model model) {
         Product product = service.findById(id);
-        model.addAttribute("product", product);
+        model.addAttribute("productssss", product);
         return "editProduct";
     }
 
