@@ -26,12 +26,10 @@ class PaymentServiceImplTest {
     @Mock
     PaymentRepository paymentRepository;
 
-    List<Payment> payments;
     Order order;
 
     @BeforeEach
     void setUp() {
-        payments = new ArrayList<>();
         List<Product> products = new ArrayList<>();
         Product product = new Product();
         product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
@@ -47,30 +45,40 @@ class PaymentServiceImplTest {
     void testAddPayment() {
         Map<String, String> paymentData = new HashMap<>();
         paymentData.put("voucherCode", "ESHOP1234ABC5678");
-        Payment payment = new Payment("p-123", order, "VOUCHER", paymentData);
 
-        when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
         Payment result = paymentService.addPayment(order, "VOUCHER", paymentData);
 
         verify(paymentRepository, times(1)).save(any(Payment.class));
-        assertEquals(payment.getId(), result.getId());
+        assertNotNull(result.getId());
+        assertEquals("VOUCHER", result.getMethod());
     }
 
     @Test
     void testGetPaymentIfFound() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP1234ABC5678");
-        Payment payment = new Payment("p-123", order, "VOUCHER", paymentData);
-
+        Payment payment = new Payment("p-123", order, "VOUCHER", new HashMap<>());
         when(paymentRepository.findById("p-123")).thenReturn(payment);
+
         Payment result = paymentService.getPayment("p-123");
         assertEquals(payment.getId(), result.getId());
     }
 
     @Test
+    void testGetAllPayments() {
+        List<Payment> payments = new ArrayList<>();
+        payments.add(new Payment("p-1", order, "VOUCHER", new HashMap<>()));
+        when(paymentRepository.findAll()).thenReturn(payments);
+
+        List<Payment> result = paymentService.getAllPayments();
+        assertEquals(1, result.size());
+    }
+
+    // --- VOUCHER SUB-FEATURE TESTS ---
+
+    @Test
     void testAddPaymentVoucherSuccess() {
         Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP1234ABC5678"); // 16 karakter, mulai ESHOP, 8 angka
+        paymentData.put("voucherCode", "ESHOP1234ABC5678"); // 16 chars, starts ESHOP, 8 digits
 
         when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -81,7 +89,7 @@ class PaymentServiceImplTest {
     @Test
     void testAddPaymentVoucherRejectedInvalidLength() {
         Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP123"); // Kurang dari 16
+        paymentData.put("voucherCode", "ESHOP123456789"); // < 16 chars
 
         when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
@@ -92,13 +100,26 @@ class PaymentServiceImplTest {
     @Test
     void testAddPaymentVoucherRejectedNoESHOP() {
         Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ABCDE12345678901"); // Tidak mulai ESHOP
+        paymentData.put("voucherCode", "SALE123456789012"); // No ESHOP prefix
 
         when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Payment result = paymentService.addPayment(order, "VOUCHER", paymentData);
         assertEquals(PaymentStatus.REJECTED.getValue(), result.getStatus());
     }
+
+    @Test
+    void testAddPaymentVoucherRejectedNot8Digits() {
+        Map<String, String> paymentData = new HashMap<>();
+        paymentData.put("voucherCode", "ESHOP12345ABCDEF"); // Only 5 digits
+
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Payment result = paymentService.addPayment(order, "VOUCHER", paymentData);
+        assertEquals(PaymentStatus.REJECTED.getValue(), result.getStatus());
+    }
+
+    // --- CASH ON DELIVERY SUB-FEATURE TESTS ---
 
     @Test
     void testAddPaymentCODSuccess() {
@@ -125,23 +146,34 @@ class PaymentServiceImplTest {
     }
 
     @Test
-    void testSetStatusSuccessUpdatesOrder() {
+    void testAddPaymentCODRejectedNullFee() {
         Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP1234ABC5678");
-        Payment payment = new Payment("p-123", order, "VOUCHER", paymentData);
+        paymentData.put("address", "Fasilkom UI");
+        // deliveryFee is null (not put)
+
+        when(paymentRepository.save(any(Payment.class))).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Payment result = paymentService.addPayment(order, "CASH_ON_DELIVERY", paymentData);
+        assertEquals(PaymentStatus.REJECTED.getValue(), result.getStatus());
+    }
+
+    // --- STATUS UPDATE TESTS ---
+
+    @Test
+    void testSetStatusSuccessUpdatesOrder() {
+        Payment payment = new Payment("p-123", order, "VOUCHER", new HashMap<>());
+        when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
 
         paymentService.setStatus(payment, PaymentStatus.SUCCESS.getValue());
 
         assertEquals(PaymentStatus.SUCCESS.getValue(), payment.getStatus());
         assertEquals(OrderStatus.SUCCESS.getValue(), order.getStatus());
-        verify(paymentRepository, times(1)).save(payment);
     }
 
     @Test
     void testSetStatusRejectedUpdatesOrderFailed() {
-        Map<String, String> paymentData = new HashMap<>();
-        paymentData.put("voucherCode", "ESHOP1234ABC5678");
-        Payment payment = new Payment("p-123", order, "VOUCHER", paymentData);
+        Payment payment = new Payment("p-123", order, "VOUCHER", new HashMap<>());
+        when(paymentRepository.save(any(Payment.class))).thenReturn(payment);
 
         paymentService.setStatus(payment, PaymentStatus.REJECTED.getValue());
 

@@ -19,27 +19,37 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment addPayment(Order order, String method, Map<String, String> paymentData) {
-        String status = PaymentStatus.REJECTED.getValue();
+        String status;
 
         if (method.equals("VOUCHER")) {
-            String voucherCode = paymentData.get("voucherCode");
-            if (voucherCode != null && voucherCode.length() == 16 && voucherCode.startsWith("ESHOP")) {
-                int numCount = 0;
-                for (char c : voucherCode.toCharArray()) {
-                    if (Character.isDigit(c)) numCount++;
-                }
-                if (numCount == 8) status = PaymentStatus.SUCCESS.getValue();
-            }
+            status = validateVoucher(paymentData);
         } else if (method.equals("CASH_ON_DELIVERY")) {
-            String address = paymentData.get("address");
-            String deliveryFee = paymentData.get("deliveryFee");
-            if (address != null && !address.isEmpty() && deliveryFee != null && !deliveryFee.isEmpty()) {
-                status = PaymentStatus.SUCCESS.getValue();
-            }
+            status = validateCOD(paymentData);
+        } else {
+            status = PaymentStatus.REJECTED.getValue();
         }
 
         Payment payment = new Payment(UUID.randomUUID().toString(), order, method, paymentData, status);
         return paymentRepository.save(payment);
+    }
+
+    private String validateVoucher(Map<String, String> paymentData) {
+        String voucherCode = paymentData.get("voucherCode");
+        if (voucherCode == null || voucherCode.length() != 16 || !voucherCode.startsWith("ESHOP")) {
+            return PaymentStatus.REJECTED.getValue();
+        }
+
+        long digitCount = voucherCode.chars().filter(Character::isDigit).count();
+        return (digitCount == 8) ? PaymentStatus.SUCCESS.getValue() : PaymentStatus.REJECTED.getValue();
+    }
+
+    private String validateCOD(Map<String, String> paymentData) {
+        String address = paymentData.get("address");
+        String deliveryFee = paymentData.get("deliveryFee");
+        if (address == null || address.trim().isEmpty() || deliveryFee == null || deliveryFee.trim().isEmpty()) {
+            return PaymentStatus.REJECTED.getValue();
+        }
+        return PaymentStatus.SUCCESS.getValue();
     }
 
     @Override
