@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>My Payment Detail</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+  <h2>Your Payment Status</h2>
+  <div class="card" th:if="${payment}">
+    <div class="card-body">
+      <h5 class="card-title" th:text="'Payment ID: ' + ${payment.id}"></h5>
+      <p class="card-text">Status:
+        <strong th:text="${payment.status}"></strong>
+      </p>
+      <p class="card-text">Method: <span th:text="${payment.method}"></span></p>
+      <a href="/order/history" class="btn btn-primary">Back to History</a>
+    </div>
+  </div>
+  <div th:unless="${payment}" class="alert alert-warning">
+    Payment record not found.
+  </div>
+</div>
+</body>
+</html>
