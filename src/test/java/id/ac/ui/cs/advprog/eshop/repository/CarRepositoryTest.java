@@ -73,4 +73,44 @@ class CarRepositoryTest {
         carRepository.delete("id-ngasal");
         assertNull(carRepository.findById("id-ngasal"));
     }
+
+    @Test
+    void testFindAll() {
+        Car car = new Car();
+        carRepository.create(car);
+
+        Iterator<Car> result = carRepository.findAll();
+        assertTrue(result.hasNext());
+    }
+
+    @Test
+    void testFindByIdSuccess() {
+        Car car = new Car();
+        car.setCarId("c1");
+        carRepository.create(car);
+
+        Car result = carRepository.findById("c1");
+        assertNotNull(result);
+        assertEquals("c1", result.getCarId());
+    }
+
+    @Test
+    void testUpdateNotFoundAfterLoop() {
+        Car car = new Car();
+        car.setCarId("c1");
+        carRepository.create(car);
+
+        Car result = carRepository.update("id-salah", new Car());
+        assertNull(result);
+    }
+
+    @Test
+    void testFindByIdNotFoundAfterLoop() {
+        Car car = new Car();
+        car.setCarId("c1");
+        carRepository.create(car);
+        Car result = carRepository.findById("id-yang-salah");
+
+        assertNull(result);
+    }
 }
