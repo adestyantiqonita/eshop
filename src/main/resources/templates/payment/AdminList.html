@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Payment Admin List</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>All Payments (Admin)</h2>
+    <table class="table table-bordered mt-3">
+        <thead class="thead-dark">
+        <tr>
+            <th>Payment ID</th>
+            <th>Method</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="payment : ${payments}">
+            <td th:text="${payment.id}"></td>
+            <td th:text="${payment.method}"></td>
+            <td>
+                    <span th:class="${payment.status == 'SUCCESS' ? 'badge badge-success' : (payment.status == 'REJECTED' ? 'badge badge-danger' : 'badge badge-warning')}"
+                          th:text="${payment.status}"></span>
+            </td>
+            <td>
+                <a th:href="@{/payment/admin/detail/{id}(id=${payment.id})}" class="btn btn-sm btn-primary">Manage</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
