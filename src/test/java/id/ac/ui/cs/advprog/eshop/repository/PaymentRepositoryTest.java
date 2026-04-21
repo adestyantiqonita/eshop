@@ -54,11 +54,6 @@ class PaymentRepositoryTest {
     }
 
     @Test
-    void testFindByIdNotFound() {
-        assertNull(paymentRepository.findById("non-existent-id"));
-    }
-
-    @Test
     void testFindAll() {
         for (Payment payment : payments) {
             paymentRepository.save(payment);
@@ -66,5 +61,20 @@ class PaymentRepositoryTest {
         List<Payment> paymentList = paymentRepository.findAll();
         assertEquals(payments.size(), paymentList.size());
         assertTrue(paymentList.containsAll(payments));
+    }
+
+    @Test
+    void testFindAllEmpty() {
+        List<Payment> payments = paymentRepository.findAll();
+        assertTrue(payments.isEmpty());
+    }
+
+    @Test
+    void testFindByIdNotFound() {
+        Payment payment = payments.get(0);
+        paymentRepository.save(payment);
+        Payment result = paymentRepository.findById("id-ngasal");
+
+        assertNull(result);
     }
 }

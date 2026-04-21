@@ -29,4 +29,10 @@ class ProductTest {
     void testGetProductQuantity() {
         assertEquals(100, this.product.getProductQuantity());
     }
+
+    @Test
+    void testSetProductQuantityNegative() {
+        this.product.setProductQuantity(-10);
+        assertEquals(-10, this.product.getProductQuantity());
+    }
 }
