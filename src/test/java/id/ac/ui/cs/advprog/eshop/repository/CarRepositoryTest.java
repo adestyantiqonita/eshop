@@ -113,4 +113,10 @@ class CarRepositoryTest {
 
         assertNull(result);
     }
+
+    @Test
+    void testFindAllEmpty() {
+        Iterator<Car> result = carRepository.findAll();
+        assertFalse(result.hasNext());
+    }
 }
